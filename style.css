@@ -10,6 +10,19 @@ html, body{
 
 }
 
+#panel{
+    cursor:pointer;
+    position:fixed;
+    right:0px;
+    color:white;
+    vertical-align: middle;
+    text-align: center;
+    width:100px;
+    height:30px;
+    background-color: orangered;
+}
+
+
 .XOtable{
 
     font-family: "Comic Sans MS";

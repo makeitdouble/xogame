@@ -20,6 +20,7 @@ function setup(begin)
 {
 	var menu = document.getElementById("menu-container");
 	menu.style.display = "block";
+	document.addEventListener("keydown",showPanel);
 	document.getElementsByClassName('winStreak')[0].onclick = function(e) {
 		if(e.target.value)
 		{
@@ -53,7 +54,21 @@ function setup(begin)
 	return;
 }
 
+function showPanel(e)
+{
+	if (e.ctrlKey)
+	{
+		var panel = document.getElementById("panel");
+		if(panel.style.top == "0px")
+		{
+			panel.style.top = "-50px";
+		}else{
+			panel.style.top = "0px";
+		}
+	}
+		return;
 
+}
 function wipeData()
 {
 	localStorage.clear()
