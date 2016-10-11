@@ -1,0 +1,120 @@
+html, body{
+    margin:0px;
+    padding:0px;
+
+}
+
+#canvasXOtable{
+    position: absolute;
+    z-index: -1;
+
+}
+
+.XOtable{
+
+    font-family: "Comic Sans MS";
+    font-size: 0.7em;
+    border:0px solid white;
+    border-collapse: collapse;
+    border-spacing: 0px;
+
+    cursor:default;
+}
+tr{
+
+    padding:0px;
+}
+
+td{
+width:25px;
+    height:25px;
+    text-align:center;
+    padding:0px;
+    margin:0px;
+    border:0px solid lightgrey;
+}
+
+td.X{
+    color: #F56607;
+}
+td.O{
+    color: #2EB821;
+}
+
+span{
+
+    cursor:default;
+    -webkit-user-select: none;
+
+    -moz-user-select: none;
+
+    -ms-user-select: none;
+
+}
+
+#menu-container {
+    cursor:default;
+    -webkit-user-select: none;
+
+    -moz-user-select: none;
+
+    -ms-user-select: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    display: none;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    background-color: #F2F2F2;
+}
+
+#menu-container:before {
+    display: inline-block;
+    height: 100%;
+    content: '';
+    vertical-align: middle;
+}
+
+#start-menu{
+
+    position:relative;
+    text-align: right;
+    display:inline-block;
+    vertical-align: middle;
+    border-radius: 10px;
+    width:200px;
+    height:200px;
+    background: #FCFBFA url(./bkg.png) no-repeat center 0px;
+    box-shadow: 3px 3px 15px #999999;
+    font-family: Tahoma;
+    font-size: 18px;
+    color: #808080;
+}
+#start-menu .setup{
+    display: block;
+    position:absolute;
+bottom:0px;
+    right:10px;
+}
+#start-menu .setup div {
+    padding:5px;
+    margin:5px;
+    text-align: center;
+}
+
+#start-menu .setup div.beginGame{
+    position:absolute;
+    cursor:pointer;
+    z-index: -1;
+    color:#FCFBFA;
+    box-shadow: 1px 1px 5px #999999;
+    margin:0px;
+    padding:0px;
+    width:65px;
+    height:25px;
+    bottom:-25px;
+    background: orangered;
+
+}

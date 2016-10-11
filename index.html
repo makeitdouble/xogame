@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>XO</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+<div id="menu-container">
+    <div id="start-menu">
+        <div class="setup">
+            <div class="tableSize">
+            <span>Table Size</span><br>
+            <select id="select-size" name="size">
+                <option value="3">3 x 3</option>
+                <option value="5">5 x 5</option>
+                <option value="10">10 x 10</option>
+                <option value="15">15 x 15</option>
+                <option value="20">20 x 20</option>
+                <option value="30">30 x 30</option>
+                <option value="40">40 x 40</option>
+                <option value="50">50 x 50</option>
+            </select>
+            </div>
+            <div class="winStreak">
+            <span>Win Streak</span><br>
+            <label><input type="radio" name="streak" value="3" checked>3</label>
+            <label><input type="radio" name="streak" value="5">5</label>
+            </div>
+            <div class="beginGame" onclick="setup(1)">Begin</div>
+        </div>
+    </div>
+</div>
+<script src="./xo.js"></script>
+<script src="./canvas.js"></script>
+
+<div id="info" onclick="wipeData()" style="position:fixed; bottom:20px; right:20px; background-color:white; padding:10px;border-radius:5px;height:20px; width:100px; text-align:center;border:1px solid grey;"></div>
+
+</body>
+
+</html>
