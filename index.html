@@ -12,7 +12,7 @@
 CLEAR
 </div>
 <div id="menu-container">
-    <div id="start-menu">
+    <div id="start-menu" class="dialog">
         <div class="setup">
             <div class="tableSize">
             <span>Table Size</span><br>
@@ -32,8 +32,14 @@ CLEAR
             <label><input type="radio" name="streak" value="3" checked>3</label>
             <label><input type="radio" name="streak" value="5">5</label>
             </div>
-            <div class="beginGame" onclick="setup(1)">Begin</div>
+
         </div>
+        <div class="button begin" onclick="setup('begin')">Begin</div>
+    </div>
+    <div id="end-game" class="dialog">
+<span id="end-message"></span>
+        <div class="button new" onclick="setup('new')">New game</div>
+        <div class="button continue" onclick="setup('continue')">Continue</div>
     </div>
 </div>
 <script src="./xo.js"></script>

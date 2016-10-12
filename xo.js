@@ -1,26 +1,44 @@
-
+var curtain = document.getElementById("menu-container");
+var startMenu = document.getElementById("start-menu");
+var endDialog = document.getElementById("end-game");
 var select = document.getElementById("select-size");
 var toggleXO = localStorage.getItem("toggleXO") ? +localStorage.getItem("toggleXO") : 0;
-
+var currentElem = null;
 var winStreak = 3;
 var winState;
 var winShift = winStreak-1;
 var tableSize;
 var body = document.body;
 var table;
-
+var XOcounter = localStorage.getItem("XOcounter") ? +localStorage.getItem("XOcounter") : 0;
 var canvas = document.createElement("canvas");
 var canvasTest;
 var c = canvas.getContext("2d");
 canvas.getContext("2d") ? canvasTest = 0 : canvasTest = 0;
-
+document.addEventListener("keydown",showPanel);
 setup();
 
-function setup(begin)
+
+function setup(state)
 {
-	var menu = document.getElementById("menu-container");
-	menu.style.display = "block";
-	document.addEventListener("keydown",showPanel);
+	if(state == 'new')
+	{
+		wipeData();
+		table.parentNode.removeChild(table);
+		XOcounter = toggleXO = winState = 0;
+		startMenu.style.display = "inline-block";
+		endDialog.style.display = "none";
+		//setup();
+	}else if(state == 'continue')
+	{
+		var temp = tableSize;
+		table.parentNode.removeChild(table);
+		wipeData();
+		localStorage.setItem("tableSize", temp);
+		XOcounter = toggleXO = winState = 0;
+	}
+
+	curtain.style.display = "block";
 	document.getElementsByClassName('winStreak')[0].onclick = function(e) {
 		if(e.target.value)
 		{
@@ -40,15 +58,15 @@ function setup(begin)
 	{
 		tableSize = +localStorage.getItem("tableSize");
 		toggleXO = +localStorage.getItem("toggleXO");
-		menu.style.display = "none";
+		curtain.style.display = "none";
 		createTable();
 		return;
 	}
-	if (begin)
+	if (state == 'begin')
 	{
 		tableSize = +select.value;
 		localStorage.setItem("tableSize", tableSize);
-		menu.style.display = "none";
+		curtain.style.display = "none";
 		createTable();
 	}
 	return;
@@ -83,13 +101,82 @@ function saveElement(e)
 	localStorage.setItem(row+'class'+cell, value);
 }
 
+
+function showXOelem(e)
+
+{
+	var target = e.target;
+	if (target == this) return;
+	while (target != this) {
+		if (target.tagName == 'TD') break;
+		target = target.parentNode;
+	}
+	if (target.className || target.innerHTML) return;
+
+	currentElem = target;
+
+	var xoElem = document.createElement("span");
+	xoElem.className = "xoElem";
+	if (toggleXO)
+	{
+		xoElem.classList.add("O");
+		xoElem.innerHTML="O";
+	}else{
+		xoElem.classList.add("X");
+		xoElem.innerHTML="X";
+	}
+	target.appendChild(xoElem);
+
+}
+
+function hideXOelem(e)
+{
+
+	var target = e.target;
+	var relatedTarget = e.relatedTarget;
+	if (target == this) return;
+
+	if (relatedTarget) {
+		while (relatedTarget) {
+			if (relatedTarget == currentElem)
+			{
+
+				return;
+			}
+			relatedTarget = relatedTarget.parentNode;
+		}
+	}
+
+	while (target != this) {
+		if (target.tagName == 'TD') break;
+		target = target.parentNode;
+	}
+
+	if (!target.className)	currentElem.innerHTML = "";
+
+}
+
+
+function clearTd(e)
+{
+	var target = e.target;
+	while (target != this) {
+		if (target.tagName == 'TD') break;
+		target = target.parentNode;
+	}
+	if (target.className) return;
+	target.innerHTML = "";
+}
+
 function createTable()
 {
 	table = document.createElement("table");
 	table.className = "XOtable";
 	body.appendChild(table);
-	table.addEventListener("mousedown", addXOelem);
-
+	table.addEventListener("mouseup", addXOelem);
+	table.addEventListener("mousedown", clearTd);
+	table.addEventListener("mouseover", showXOelem);
+	table.addEventListener("mouseout", hideXOelem);
 	for ( var i = 0; i < tableSize; i++)
 	{
 		var tr = document.createElement("tr");
@@ -144,16 +231,21 @@ function canvasOFF()
 
 function addXOelem(e)
 {
-	e.currentTarget.ondragstart = function(){return false;}
 
-	if(e.target == e.currentTarget || !!e.target.className ) return;
+	e.currentTarget.ondragstart = function(){return false;}
+	var target = e.target;
+
+	console.log("xotarget: " + e.target);
+
+	if(target == e.currentTarget || !!target.className ) return;
+	target.innerHTML = "";
 	var xoElem = document.createElement("span");
 	xoElem.className = "xoElem";
 
 	if ( toggleXO )
 	{
 		xoElem.classList.add("O");
-		e.target.className = "O";
+		target.className = "O";
 		if (canvasTest)
 		{
 			canvasDrawO(e);
@@ -166,7 +258,7 @@ function addXOelem(e)
 		localStorage.setItem("toggleXO", toggleXO);
 	}else{
 		xoElem.classList.add("X");
-		e.target.className = "X";
+		target.className = "X";
 		info.innerHTML = "O move";
 		if (canvasTest)
 		{
@@ -178,15 +270,32 @@ function addXOelem(e)
 		toggleXO = 1;
 		localStorage.setItem("toggleXO", toggleXO);
 	}
-	e.target.appendChild(xoElem);
+	target.appendChild(xoElem);
 	checkWin(e);
+	XOcounter++;
+	localStorage.setItem("XOcounter", XOcounter);
+	console.log("xo counter: " + XOcounter);
+	if (XOcounter == tableSize*tableSize)
+	{
+		XOcounter = 0;
+		wipeData();
+		showWin('draw');
+	}
 }
 
 function showWin(value)
 {
+	var endMessage = document.getElementById("end-message");
+	startMenu.style.display = "none";
+	curtain.style.display = "block";
+	endDialog.style.display = "inline-block";
+	endMessage.innerHTML = value +": win";
+	endDialog.appendChild(endMessage);
 	info.innerHTML = value +": win";
 	winState=1;
-
+	wipeData();
+	XOcounter = toggleXO = winState = 0;
+/*
 	setTimeout(function(){
 		var temp = tableSize;
 		wipeData();
@@ -196,7 +305,7 @@ function showWin(value)
 		info.innerHTML = "";
 		toggleXO = winState = 0;
 	},2500);
-
+*/
 }
 
 function getCoords(elem) {
@@ -473,3 +582,93 @@ function canvasDrawX(e)
 	}
 	xObject.firstLine();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+
+
+ function addXOelem(e)
+ {
+
+
+ e.currentTarget.ondragstart = function(){return false;}
+
+
+ if(e.target == e.currentTarget || !!e.target.className ) return;
+ e.target.innerHTML = "";
+ var xoElem = document.createElement("span");
+ xoElem.className = "xoElem";
+
+ if ( toggleXO )
+ {
+ xoElem.classList.add("O");
+ e.target.className = "O";
+ if (canvasTest)
+ {
+ canvasDrawO(e);
+ }else{
+ xoElem.innerHTML="O";
+ }
+ info.innerHTML = "X move";
+ saveElement(e);
+ toggleXO = 0;
+ localStorage.setItem("toggleXO", toggleXO);
+ }else{
+ xoElem.classList.add("X");
+ e.target.className = "X";
+ info.innerHTML = "O move";
+ if (canvasTest)
+ {
+ canvasDrawX(e);
+ }else{
+ xoElem.innerHTML="X";
+ }
+ saveElement(e);
+ toggleXO = 1;
+ localStorage.setItem("toggleXO", toggleXO);
+ }
+ e.target.appendChild(xoElem);
+ checkWin(e);
+ XOcounter++;
+ localStorage.setItem("XOcounter", XOcounter);
+ console.log(XOcounter);
+ if (XOcounter == tableSize*tableSize)
+ {
+ XOcounter = 0;
+ wipeData();
+ showWin('draw');
+ }
+ }
+
+
+
+ */
