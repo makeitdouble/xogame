@@ -17,7 +17,7 @@ var c = canvas.getContext("2d");
 canvas.getContext("2d") ? canvasTest = 0 : canvasTest = 0;
 document.addEventListener("keydown",showPanel);
 setup();
-
+//test
 
 function setup(state)
 {
@@ -69,7 +69,6 @@ function setup(state)
 		curtain.style.display = "none";
 		createTable();
 	}
-	return;
 }
 
 function showPanel(e)
@@ -84,12 +83,11 @@ function showPanel(e)
 			panel.style.top = "0px";
 		}
 	}
-		return;
 
 }
 function wipeData()
 {
-	localStorage.clear()
+	localStorage.clear();
 	console.log("CLEAR___________________");
 }
 
@@ -232,7 +230,7 @@ function canvasOFF()
 function addXOelem(e)
 {
 
-	e.currentTarget.ondragstart = function(){return false;}
+	e.currentTarget.ondragstart = function(){return false};
 	var target = e.target;
 
 	console.log("xotarget: " + e.target);
@@ -292,7 +290,6 @@ function showWin(value)
 	endMessage.innerHTML = value +": win";
 	endDialog.appendChild(endMessage);
 	info.innerHTML = value +": win";
-	winState=1;
 	wipeData();
 	XOcounter = toggleXO = winState = 0;
 /*
@@ -411,9 +408,9 @@ function checkWin(e)
 			var rowEnd = row+4 > rows ? rows : row+4;
 			var cellStart = cellEnd = cell;
 		}else{
-			var cellStart = cell-4 < 0 ? 0 : cell-4;
+			cellStart = cell-4 < 0 ? 0 : cell-4;
 			var cellEnd = cell+4 > cells ? cells : cell+4;
-			var rowStart = rowEnd = row;
+			rowStart = rowEnd = row;
 		}
 
 		for ( var i = rowStart; i <= rowEnd; i++)
@@ -489,7 +486,7 @@ function canvasDrawTable(table)
 
 	c.strokeStyle = "lightgrey";
 
-	for ( var i = 25; i < tableW; i+=25)
+	for ( i = 25; i < tableW; i+=25)
 	{
 		c.beginPath();
 		c.moveTo(i,0);
@@ -497,7 +494,7 @@ function canvasDrawTable(table)
 		c.stroke();
 	}
 
-	for ( var i = 25; i < tableH; i+=25)
+	for ( i = 25; i < tableH; i+=25)
 	{
 		c.beginPath();
 		c.moveTo(0,i);
@@ -561,7 +558,7 @@ function canvasDrawX(e)
 			}
 
 		}, 3)
-	}
+	};
 
 	xObject.secondLine = function()
 	{
@@ -579,7 +576,7 @@ function canvasDrawX(e)
 				clearInterval(interval);
 			}
 		}, 3)
-	}
+	};
 	xObject.firstLine();
 }
 
