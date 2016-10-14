@@ -3,7 +3,7 @@ var startMenu = document.getElementById("start-menu");
 var endDialog = document.getElementById("end-game");
 var select = document.getElementById("select-size");
 var toggleXO = localStorage.getItem("toggleXO") ? +localStorage.getItem("toggleXO") : 0;
-var currentElem = null;
+
 var winStreak = 3;
 var winState;
 var winShift = winStreak-1;
@@ -17,7 +17,6 @@ var c = canvas.getContext("2d");
 canvas.getContext("2d") ? canvasTest = 0 : canvasTest = 0;
 document.addEventListener("keydown",showPanel);
 setup();
-//test
 
 function setup(state)
 {
@@ -100,81 +99,14 @@ function saveElement(e)
 }
 
 
-function showXOelem(e)
-
-{
-	var target = e.target;
-	if (target == this) return;
-	while (target != this) {
-		if (target.tagName == 'TD') break;
-		target = target.parentNode;
-	}
-	if (target.className || target.innerHTML) return;
-
-	currentElem = target;
-
-	var xoElem = document.createElement("span");
-	xoElem.className = "xoElem";
-	if (toggleXO)
-	{
-		xoElem.classList.add("O");
-		xoElem.innerHTML="O";
-	}else{
-		xoElem.classList.add("X");
-		xoElem.innerHTML="X";
-	}
-	target.appendChild(xoElem);
-
-}
-
-function hideXOelem(e)
-{
-
-	var target = e.target;
-	var relatedTarget = e.relatedTarget;
-	if (target == this) return;
-
-	if (relatedTarget) {
-		while (relatedTarget) {
-			if (relatedTarget == currentElem)
-			{
-
-				return;
-			}
-			relatedTarget = relatedTarget.parentNode;
-		}
-	}
-
-	while (target != this) {
-		if (target.tagName == 'TD') break;
-		target = target.parentNode;
-	}
-
-	if (!target.className)	currentElem.innerHTML = "";
-
-}
-
-
-function clearTd(e)
-{
-	var target = e.target;
-	while (target != this) {
-		if (target.tagName == 'TD') break;
-		target = target.parentNode;
-	}
-	if (target.className) return;
-	target.innerHTML = "";
-}
 
 function createTable()
 {
 	table = document.createElement("table");
-	table.className = "XOtable";
+	table.classList = localStorage.getItem("tableClassList") ? localStorage.getItem("tableClassList") : "XOtable";
 	body.appendChild(table);
-	table.addEventListener("mouseup", addXOelem);
-	table.addEventListener("mousedown", clearTd);
-	table.addEventListener("mouseover", showXOelem);
-	table.addEventListener("mouseout", hideXOelem);
+	table.addEventListener("mousedown", addXOelem);
+
 	for ( var i = 0; i < tableSize; i++)
 	{
 		var tr = document.createElement("tr");
@@ -254,6 +186,7 @@ function addXOelem(e)
 		saveElement(e);
 		toggleXO = 0;
 		localStorage.setItem("toggleXO", toggleXO);
+		table.classList.toggle('showO');
 	}else{
 		xoElem.classList.add("X");
 		target.className = "X";
@@ -267,11 +200,13 @@ function addXOelem(e)
 		saveElement(e);
 		toggleXO = 1;
 		localStorage.setItem("toggleXO", toggleXO);
+		table.classList.toggle('showO');
 	}
 	target.appendChild(xoElem);
 	checkWin(e);
 	XOcounter++;
 	localStorage.setItem("XOcounter", XOcounter);
+	localStorage.setItem("tableClassList", table.classList);
 	console.log("xo counter: " + XOcounter);
 	if (XOcounter == tableSize*tableSize)
 	{

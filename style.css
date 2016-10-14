@@ -1,6 +1,6 @@
 html, body{
-    margin:0px;
-    padding:0px;
+    margin:0;
+    padding:0;
 
 }
 
@@ -13,7 +13,7 @@ html, body{
 #panel{
     cursor:pointer;
     position:fixed;
-    right:0px;
+    right:0;
     color:white;
     vertical-align: middle;
     text-align: center;
@@ -27,24 +27,42 @@ html, body{
 
     font-family: "Comic Sans MS";
     font-size: 0.7em;
-    border:0px solid white;
+    border:0 solid white;
     border-collapse: collapse;
-    border-spacing: 0px;
+    border-spacing: 0;
 
     cursor:default;
 }
+
+.XOtable td:hover:before{
+    color: #F56607;
+    content: 'X';
+}
+
+.XOtable.showO td:hover:before{
+    color: #2EB821;
+    content: 'O';
+}
+
+.XOtable td.X:hover:before{
+    content: '';
+}
+.XOtable td.O:hover:before{
+    content: '';
+}
+
 tr{
 
-    padding:0px;
+    padding:0;
 }
 
 td{
     width:25px;
     height:25px;
     text-align:center;
-    padding:0px;
-    margin:0px;
-    border:0px solid lightgrey;
+    padding:0;
+    margin:0;
+    border:0 solid lightgrey;
 }
 
 span.X{
@@ -114,7 +132,7 @@ span{
 #start-menu .setup{
     display: block;
     position:absolute;
-    bottom:0px;
+    bottom:0;
     right:10px;
 }
 #start-menu .setup div {
@@ -131,13 +149,13 @@ span{
     z-index: -1;
     color:#FCFBFA;
     box-shadow: 1px 1px 5px #999999;
-    margin:0px;
+    margin:0;
     padding:2px 10px;
     height:20px;
     bottom:-24px;
     background: orangered;
     font-size: 15px;
-    border-radius: 0px 0px 5px 5px;
+    border-radius: 0 0 5px 5px;
 }
 
 .button.begin{
