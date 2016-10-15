@@ -14,7 +14,7 @@ var XOcounter = localStorage.getItem("XOcounter") ? +localStorage.getItem("XOcou
 var canvas = document.createElement("canvas");
 var canvasTest;
 var c = canvas.getContext("2d");
-canvas.getContext("2d") ? canvasTest = 0 : canvasTest = 0;
+canvas.getContext("2d") ? canvasTest = 1 : canvasTest = 0;
 document.addEventListener("keydown",showPanel);
 setup();
 
@@ -27,7 +27,6 @@ function setup(state)
 		XOcounter = toggleXO = winState = 0;
 		startMenu.style.display = "inline-block";
 		endDialog.style.display = "none";
-		//setup();
 	}else if(state == 'continue')
 	{
 		var temp = tableSize;
@@ -137,8 +136,10 @@ function createTable()
 	{
 		table.style.width =  25 * tableSize + "px";
 		table.style.height = 25 * tableSize + "px";
+
 		canvasDrawTable(table);
 		getElementsForCanvas();
+
 	}else{
 		table.style.width = 25 * tableSize + (tableSize+3) + "px";
 		table.style.height = 25 * tableSize + (tableSize+3) + "px";
@@ -182,7 +183,6 @@ function addXOelem(e)
 		}else{
 			xoElem.innerHTML="O";
 		}
-		info.innerHTML = "X move";
 		saveElement(e);
 		toggleXO = 0;
 		localStorage.setItem("toggleXO", toggleXO);
@@ -190,7 +190,6 @@ function addXOelem(e)
 	}else{
 		xoElem.classList.add("X");
 		target.className = "X";
-		info.innerHTML = "O move";
 		if (canvasTest)
 		{
 			canvasDrawX(e);
@@ -224,20 +223,8 @@ function showWin(value)
 	endDialog.style.display = "inline-block";
 	endMessage.className = value +"win";
 	endDialog.appendChild(endMessage);
-	info.innerHTML = value +": win";
 	wipeData();
 	XOcounter = toggleXO = winState = 0;
-/*
-	setTimeout(function(){
-		var temp = tableSize;
-		wipeData();
-		localStorage.setItem("tableSize", temp);
-		table.parentNode.removeChild(table);
-		setup();
-		info.innerHTML = "";
-		toggleXO = winState = 0;
-	},2500);
-*/
 }
 
 function getCoords(elem) {
@@ -388,11 +375,11 @@ function getElementsForCanvas()
 			var e = {};
 			e.target = table.rows[i].cells[j];
 			e.currentTarget = table;
-			if (table.rows[i].cells[j].className == "O")
+			if (table.rows[i].cells[j].className == "X")
 			{
-				canvasDrawO(e);
-			}else if(table.rows[i].cells[j].className == "X"){
 				canvasDrawX(e);
+			}else if(table.rows[i].cells[j].className == "O"){
+				canvasDrawO(e);
 			}
 		}
 	}
@@ -438,6 +425,7 @@ function canvasDrawTable(table)
 	}
 }
 
+
 function canvasDrawO(e)
 {
 	var coords = getCoords(e.target);
@@ -445,22 +433,32 @@ function canvasDrawO(e)
 	var lineLength = e.target.offsetWidth - 10;
 	coords.left = coords.left - tableCoords.left + lineLength - 3;
 	coords.top = coords.top - tableCoords.top + lineLength - 3;
-	c.strokeStyle = "#2EB821";
-	c.lineWidth = 0;
+	c.lineWidth = 3;
 
-	var step = 0;
+	//without animation
+	//_________________
+	/*
+	 c.beginPath();
+	 c.arc( coords.left, coords.top, lineLength/2, 0, Math.PI*2, false);
+	 c.stroke();
+	*/
+
+	//with animation
+	//_________________
+
+	var step = 6;
 	var interval = setInterval(function(){
-		step += 0.1;
+		step--;
 		c.beginPath();
-		c.arc( coords.left, coords.top, lineLength/2, 0, Math.PI*step, false);
+		c.strokeStyle = "#2EB821";
+		c.arc( coords.left, coords.top, lineLength/2, step, Math.PI*2, false);
 		c.stroke();
-		if (step > 2)
+		if (!step)
 		{
-			step = 0;
 			clearInterval(interval);
 		}
 
-	}, 3)
+	}, 30)
 }
 
 function canvasDrawX(e)
@@ -470,10 +468,27 @@ function canvasDrawX(e)
 	var lineLength = e.target.offsetWidth - 10;
 	coords.left = coords.left - tableCoords.left + 5;
 	coords.top = coords.top - tableCoords.top + 5;
-	c.strokeStyle = "#F56607";
+
 	c.lineWidth = 3;
 	var step = 0;
 	var step2 = lineLength;
+
+	//without animation
+	//________________
+	/*
+	 c.beginPath();
+	 c.moveTo(coords.left,coords.top);
+	 c.lineTo(lineLength+coords.left,lineLength+coords.top);
+	 c.stroke();
+	 c.beginPath();
+	 c.moveTo(lineLength+coords.left,coords.top);
+	 c.lineTo(coords.left,coords.top+lineLength);
+	 c.stroke();
+	*/
+
+
+	//with animation
+	//________________
 
 	var xObject = {};
 	xObject.firstLine = function()
@@ -481,6 +496,7 @@ function canvasDrawX(e)
 		var interval = setInterval(function(){
 			step++;
 			c.beginPath();
+			c.strokeStyle = "#F56607";
 			c.moveTo(coords.left,coords.top);
 			c.lineTo(step+coords.left,step+coords.top);
 			c.stroke();
@@ -501,6 +517,7 @@ function canvasDrawX(e)
 			step++;
 			step2--;
 			c.beginPath();
+			c.strokeStyle = "#F56607";
 			c.moveTo(lineLength+coords.left,coords.top);
 			c.lineTo(step2+coords.left,step+coords.top);
 			c.stroke();
@@ -514,93 +531,3 @@ function canvasDrawX(e)
 	};
 	xObject.firstLine();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-
-
-
- function addXOelem(e)
- {
-
-
- e.currentTarget.ondragstart = function(){return false;}
-
-
- if(e.target == e.currentTarget || !!e.target.className ) return;
- e.target.innerHTML = "";
- var xoElem = document.createElement("span");
- xoElem.className = "xoElem";
-
- if ( toggleXO )
- {
- xoElem.classList.add("O");
- e.target.className = "O";
- if (canvasTest)
- {
- canvasDrawO(e);
- }else{
- xoElem.innerHTML="O";
- }
- info.innerHTML = "X move";
- saveElement(e);
- toggleXO = 0;
- localStorage.setItem("toggleXO", toggleXO);
- }else{
- xoElem.classList.add("X");
- e.target.className = "X";
- info.innerHTML = "O move";
- if (canvasTest)
- {
- canvasDrawX(e);
- }else{
- xoElem.innerHTML="X";
- }
- saveElement(e);
- toggleXO = 1;
- localStorage.setItem("toggleXO", toggleXO);
- }
- e.target.appendChild(xoElem);
- checkWin(e);
- XOcounter++;
- localStorage.setItem("XOcounter", XOcounter);
- console.log(XOcounter);
- if (XOcounter == tableSize*tableSize)
- {
- XOcounter = 0;
- wipeData();
- showWin('draw');
- }
- }
-
-
-
- */
