@@ -17,8 +17,7 @@ html, body{
     color:white;
     vertical-align: middle;
     text-align: center;
-    width:100px;
-    height:30px;
+    padding:5px;
     background-color: orangered;
 }
 
