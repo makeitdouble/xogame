@@ -14,7 +14,7 @@ var XOcounter = localStorage.getItem("XOcounter") ? +localStorage.getItem("XOcou
 var canvas = document.createElement("canvas");
 var canvasTest;
 var c = canvas.getContext("2d");
-canvas.getContext("2d") ? canvasTest = 1 : canvasTest = 0;
+canvas.getContext("2d") ? canvasTest = 0 : canvasTest = 0;
 document.addEventListener("keydown",showPanel);
 setup();
 
