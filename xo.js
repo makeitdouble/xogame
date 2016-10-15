@@ -3,8 +3,8 @@ var startMenu = document.getElementById("start-menu");
 var endDialog = document.getElementById("end-game");
 var select = document.getElementById("select-size");
 var toggleXO = localStorage.getItem("toggleXO") ? +localStorage.getItem("toggleXO") : 0;
-
-var winStreak = 3;
+//УБРАТЬ  ПРАВЫВЙ КЛЛИК
+var winStreak = localStorage.getItem("winStreak") ? localStorage.getItem("winStreak") : 3;
 var winState;
 var winShift = winStreak-1;
 var tableSize;
@@ -49,6 +49,7 @@ function setup(state)
 				select.insertBefore(option, select.options[0]);
 			}
 			winStreak = e.target.value;
+			localStorage.setItem("winStreak", winStreak);
 		}
 	};
 
@@ -162,7 +163,10 @@ function canvasOFF()
 
 function addXOelem(e)
 {
-
+	if(event.button==2)
+	{
+		return false;
+	}
 	e.currentTarget.ondragstart = function(){return false};
 	var target = e.target;
 
