@@ -5,8 +5,10 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="./style.css">
 </head>
-
 <body>
+<div id="panel" style="top:0" onclick="setup('continue')">
+NEW
+</div>
 <div id="panel" style="top:0" onclick="setup('continue')">
 CLEAR
 </div>
@@ -14,7 +16,7 @@ CLEAR
     <div id="start-menu" class="dialog">
         <div class="setup">
             <div class="tableSize">
-            <span>Table Size</span><br>
+            <label>Table Size<br>
             <select id="select-size" name="size">
                 <option value="3">3 x 3</option>
                 <option value="5">5 x 5</option>
@@ -24,7 +26,7 @@ CLEAR
                 <option value="30">30 x 30</option>
                 <option value="40">40 x 40</option>
                 <option value="50">50 x 50</option>
-            </select>
+            </select></label>
             </div>
             <div class="winStreak">
             <span>Win Streak</span><br>
