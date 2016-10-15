@@ -222,7 +222,7 @@ function showWin(value)
 	startMenu.style.display = "none";
 	curtain.style.display = "block";
 	endDialog.style.display = "inline-block";
-	endMessage.innerHTML = value +": win";
+	endMessage.className = value +"win";
 	endDialog.appendChild(endMessage);
 	info.innerHTML = value +": win";
 	wipeData();

@@ -11,7 +11,6 @@ html, body{
 }
 
 #panel{
-    cursor:pointer;
     position:fixed;
     right:0;
     color:white;
@@ -19,6 +18,9 @@ html, body{
     text-align: center;
     padding:5px;
     background-color: orangered;
+}
+#panel span{
+    cursor:pointer;
 }
 
 
@@ -126,6 +128,23 @@ span{
 #start-menu{
     text-align: right;
     background-image: url(./bkg.png);
+}
+
+#end-message{
+    display: block;
+    width: 100%;
+    height:100%;
+}
+.Xwin{
+    background-image: url(./xwin.png);
+}
+
+.Owin{
+    background-image: url(./owin.png);
+}
+
+.drawwin{
+    background-image: url(./draw.png);
 }
 
 #start-menu .setup{

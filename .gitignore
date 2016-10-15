@@ -3,3 +3,4 @@ test
 .idea/modules.xml
 .idea/workspace.xml
 .idea/xogame.iml
+*ai
