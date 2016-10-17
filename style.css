@@ -1,13 +1,11 @@
 html, body{
     margin:0;
     padding:0;
-
 }
 
 #canvasXOtable{
     position: absolute;
     z-index: -1;
-
 }
 
 #panel{
@@ -19,15 +17,14 @@ html, body{
     padding:5px;
     background-color: orangered;
 }
+
 #panel span{
     cursor:pointer;
 }
 
-
 .XOtable{
-
     border-collapse: collapse;
-    font-family: "Comic Sans MS";
+    font-family: "Comic Sans MS", sans-serif;
     font-size: 0.7em;
     cursor:default;
 }
@@ -50,7 +47,6 @@ html, body{
 }
 
 tr{
-
     padding:0;
 }
 
@@ -71,22 +67,16 @@ span.O{
 }
 
 span{
-
     cursor:default;
     -webkit-user-select: none;
-
     -moz-user-select: none;
-
     -ms-user-select: none;
-
 }
 
 #menu-container {
     cursor:default;
     -webkit-user-select: none;
-
     -moz-user-select: none;
-
     -ms-user-select: none;
     position: fixed;
     top: 0;
@@ -115,7 +105,7 @@ span{
     height:200px;
     background: #FCFBFA;
     box-shadow: 3px 3px 15px #999999;
-    font-family: Tahoma;
+    font-family: Tahoma, sans-serif;
     font-size: 18px;
     color: #808080;
 }

@@ -59,11 +59,12 @@ function randomField()
 	return min + Math.floor(Math.random() * (max + 1 - min));
 }
 
+/*
 function getCompMove(c)
 {
 	
 }
-
+*/
 
 
 
@@ -152,7 +153,8 @@ function saveElement(e)
 function createTable()
 {
 	table = document.createElement("table");
-	table.classList = sessionStorage.getItem("tableClassList") ? sessionStorage.getItem("tableClassList") : "XOtable";
+	table.className = "XOtable";
+	table.classList = sessionStorage.getItem("tableClassList") ? sessionStorage.getItem("tableClassList") : table.classList;
 	body.appendChild(table);
 	table.addEventListener("mousedown", addXOelem);
 	table.ondragstart = function(){return false};
@@ -212,7 +214,7 @@ function canvasOFF()
 
 function addXOelem(e)
 {
-	if(event.button == 2)
+	if(e.button == 2)
 	{
 		return false;
 	}
