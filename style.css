@@ -7,7 +7,6 @@ html, body{
 #canvasXOtable{
     position: absolute;
     z-index: -1;
-
 }
 
 #panel{
@@ -19,19 +18,18 @@ html, body{
     padding:5px;
     background-color: orangered;
 }
+
 #panel span{
     cursor:pointer;
 }
 
 
 .XOtable{
-
-    font-family: "Comic Sans MS";
+    font-family: "Comic Sans MS", sans-serif;
     font-size: 0.7em;
     border:0 solid white;
     border-collapse: collapse;
     border-spacing: 0;
-
     cursor:default;
 }
 
@@ -53,7 +51,6 @@ html, body{
 }
 
 tr{
-
     padding:0;
 }
 
@@ -74,22 +71,16 @@ span.O{
 }
 
 span{
-
     cursor:default;
     -webkit-user-select: none;
-
     -moz-user-select: none;
-
     -ms-user-select: none;
-
 }
 
 #menu-container {
     cursor:default;
     -webkit-user-select: none;
-
     -moz-user-select: none;
-
     -ms-user-select: none;
     position: fixed;
     top: 0;
@@ -118,13 +109,15 @@ span{
     height:200px;
     background: #FCFBFA;
     box-shadow: 3px 3px 15px #999999;
-    font-family: Tahoma;
+    font-family: Tahoma, sans-serif;
     font-size: 18px;
     color: #808080;
 }
+
 #end-game{
     display: none;
 }
+
 #start-menu{
     text-align: right;
     background-image: url(./bkg.png);
@@ -135,6 +128,7 @@ span{
     width: 100%;
     height:100%;
 }
+
 .Xwin{
     background-image: url(./xwin.png);
 }
@@ -153,6 +147,7 @@ span{
     bottom:0;
     right:10px;
 }
+
 #start-menu .setup div {
     padding:5px;
     margin:5px;
@@ -185,4 +180,8 @@ span{
 }
 .button.continue{
     right:10px;
+}
+
+.cbalink{
+    display: none!important;
 }
