@@ -26,12 +26,9 @@ html, body{
 
 .XOtable{
 
+    border-collapse: collapse;
     font-family: "Comic Sans MS";
     font-size: 0.7em;
-    border:0 solid white;
-    border-collapse: collapse;
-    border-spacing: 0;
-
     cursor:default;
 }
 

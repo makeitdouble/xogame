@@ -2,21 +2,70 @@ var curtain = document.getElementById("menu-container");
 var startMenu = document.getElementById("start-menu");
 var endDialog = document.getElementById("end-game");
 var select = document.getElementById("select-size");
-var toggleXO = localStorage.getItem("toggleXO") ? +localStorage.getItem("toggleXO") : 0;
-//УБРАТЬ  ПРАВЫВЙ КЛЛИК
-var winStreak = localStorage.getItem("winStreak") ? localStorage.getItem("winStreak") : 3;
+var toggleXO = sessionStorage.getItem("toggleXO") ? +sessionStorage.getItem("toggleXO") : 0;
+var winStreak = sessionStorage.getItem("winStreak") ? sessionStorage.getItem("winStreak") : 3;
 var winState;
 var winShift = winStreak-1;
 var tableSize;
 var body = document.body;
 var table;
-var XOcounter = localStorage.getItem("XOcounter") ? +localStorage.getItem("XOcounter") : 0;
+var XOcounter = sessionStorage.getItem("XOcounter") ? +sessionStorage.getItem("XOcounter") : 0;
+
+var compEnable = 1;
+
+//__________________________
 var canvas = document.createElement("canvas");
-var canvasTest;
+var canvasEnabled;
 var c = canvas.getContext("2d");
-canvas.getContext("2d") ? canvasTest = 0 : canvasTest = 0;
+canvas.getContext("2d") ? canvasEnabled = 0 : canvasEnabled = 0;
+//__________________________
+
 document.addEventListener("keydown",showPanel);
 setup();
+var compMove = 0;
+var fMove;
+var compRow;
+var compCell;
+function computer(compTarget, firstMove)
+{
+	compMove = 0;
+	var c = {};
+	//e.target = table.rows[compTarget.row].cells[compTarget.cell];
+	c.currentTarget = table;
+
+	if (firstMove == 0)
+	{
+		do{c.target = table.rows[randomField()].cells[randomField()];}
+		while(c.target.className)
+		fMove = c.target;
+		compRow = fMove.parentNode.rowIndex;
+		compCell = fMove.cellIndex;
+	}
+
+	console.log("row + cell comp: " + compRow + " " + compCell);
+
+	compCell++;
+	c.target = table.rows[compRow].cells[compCell];
+	console.log("compTarget" + c.target);
+	addXOelem(c);
+}
+
+
+
+function randomField()
+{
+	var min = 0;
+	var max = tableSize - 1;
+	return min + Math.floor(Math.random() * (max + 1 - min));
+}
+
+function getCompMove(c)
+{
+	
+}
+
+
+
 
 function setup(state)
 {
@@ -32,7 +81,7 @@ function setup(state)
 		var temp = tableSize;
 		table.parentNode.removeChild(table);
 		wipeData();
-		localStorage.setItem("tableSize", temp);
+		sessionStorage.setItem("tableSize", temp);
 		XOcounter = toggleXO = winState = 0;
 	}
 
@@ -49,14 +98,14 @@ function setup(state)
 				select.insertBefore(option, select.options[0]);
 			}
 			winStreak = e.target.value;
-			localStorage.setItem("winStreak", winStreak);
+			sessionStorage.setItem("winStreak", winStreak);
 		}
 	};
 
-	if (localStorage.getItem("tableSize"))
+	if (sessionStorage.getItem("tableSize"))
 	{
-		tableSize = +localStorage.getItem("tableSize");
-		toggleXO = +localStorage.getItem("toggleXO");
+		tableSize = +sessionStorage.getItem("tableSize");
+		toggleXO = +sessionStorage.getItem("toggleXO");
 		curtain.style.display = "none";
 		createTable();
 		return;
@@ -64,7 +113,7 @@ function setup(state)
 	if (state == 'begin')
 	{
 		tableSize = +select.value;
-		localStorage.setItem("tableSize", tableSize);
+		sessionStorage.setItem("tableSize", tableSize);
 		curtain.style.display = "none";
 		createTable();
 	}
@@ -86,8 +135,8 @@ function showPanel(e)
 }
 function wipeData()
 {
-	localStorage.clear();
-	console.log("CLEAR___________________");
+	sessionStorage.clear();
+	console.log("___________________ALL CLEAR, sir!___________________");
 }
 
 function saveElement(e)
@@ -95,7 +144,7 @@ function saveElement(e)
 	var row = e.target.parentNode.rowIndex;
 	var cell = e.target.cellIndex;
 	var value = e.target.className;
-	localStorage.setItem(row+'class'+cell, value);
+	sessionStorage.setItem(row+'class'+cell, value);
 }
 
 
@@ -103,9 +152,11 @@ function saveElement(e)
 function createTable()
 {
 	table = document.createElement("table");
-	table.classList = localStorage.getItem("tableClassList") ? localStorage.getItem("tableClassList") : "XOtable";
+	table.classList = sessionStorage.getItem("tableClassList") ? sessionStorage.getItem("tableClassList") : "XOtable";
 	body.appendChild(table);
 	table.addEventListener("mousedown", addXOelem);
+	table.ondragstart = function(){return false};
+	table.style.borderCollapse = "collapse";
 
 	for ( var i = 0; i < tableSize; i++)
 	{
@@ -116,16 +167,16 @@ function createTable()
 			var td = document.createElement("td");
 			tr.appendChild(td);
 
-			if (localStorage.getItem(i+'class'+j))
+			if (sessionStorage.getItem(i+'class'+j))
 			{
 				var xoElem = document.createElement("span");
 				xoElem.className = "xoElem";
-				xoElem.className = td.className = localStorage.getItem(i+'class'+j);
-				if (canvasTest)
+				xoElem.className = td.className = sessionStorage.getItem(i+'class'+j);
+				if (canvasEnabled)
 				{
-					td.className = localStorage.getItem(i+'class'+j);
+					td.className = sessionStorage.getItem(i+'class'+j);
 				}else{
-					xoElem.innerHTML = localStorage.getItem(i+'class'+j);
+					xoElem.innerHTML = sessionStorage.getItem(i+'class'+j);
 					td.appendChild(xoElem);
 				}
 			}
@@ -133,7 +184,7 @@ function createTable()
 		table.appendChild(tr);
 	}
 
-	if ( canvasTest )
+	if ( canvasEnabled )
 	{
 		table.style.width =  25 * tableSize + "px";
 		table.style.height = 25 * tableSize + "px";
@@ -142,8 +193,8 @@ function createTable()
 		getElementsForCanvas();
 
 	}else{
-		table.style.width = 25 * tableSize + (tableSize+3) + "px";
-		table.style.height = 25 * tableSize + (tableSize+3) + "px";
+		table.style.width = 25 * tableSize + (tableSize+1) + "px";
+		table.style.height = 25 * tableSize + (tableSize+1) + "px";
 		canvasOFF();
 	}
 }
@@ -153,8 +204,6 @@ function createTable()
 function canvasOFF()
 {
 	var cells = document.getElementsByTagName("td");
-	table.style.borderWidth = "2px";
-	table.style.borderColor = "white";
 	for ( var i = 0; i < cells.length; i++)
 	{
 		cells[i].style.borderWidth = "1px";
@@ -163,14 +212,14 @@ function canvasOFF()
 
 function addXOelem(e)
 {
-	if(event.button==2)
+	if(event.button == 2)
 	{
 		return false;
 	}
-	e.currentTarget.ondragstart = function(){return false};
+
 	var target = e.target;
 
-	console.log("xotarget: " + e.target);
+	//console.log("xotarget: " + e.target);
 
 	if(target == e.currentTarget || !!target.className ) return;
 	target.innerHTML = "";
@@ -181,7 +230,7 @@ function addXOelem(e)
 	{
 		xoElem.classList.add("O");
 		target.className = "O";
-		if (canvasTest)
+		if (canvasEnabled)
 		{
 			canvasDrawO(e);
 		}else{
@@ -189,12 +238,12 @@ function addXOelem(e)
 		}
 		saveElement(e);
 		toggleXO = 0;
-		localStorage.setItem("toggleXO", toggleXO);
+		sessionStorage.setItem("toggleXO", toggleXO);
 		table.classList.toggle('showO');
 	}else{
 		xoElem.classList.add("X");
 		target.className = "X";
-		if (canvasTest)
+		if (canvasEnabled)
 		{
 			canvasDrawX(e);
 		}else{
@@ -202,15 +251,16 @@ function addXOelem(e)
 		}
 		saveElement(e);
 		toggleXO = 1;
-		localStorage.setItem("toggleXO", toggleXO);
+		sessionStorage.setItem("toggleXO", toggleXO);
 		table.classList.toggle('showO');
+		if (compEnable)	compMove = 1;
 	}
 	target.appendChild(xoElem);
 	checkWin(e);
 	XOcounter++;
-	localStorage.setItem("XOcounter", XOcounter);
-	localStorage.setItem("tableClassList", table.classList);
-	console.log("xo counter: " + XOcounter);
+	sessionStorage.setItem("XOcounter", XOcounter);
+	sessionStorage.setItem("tableClassList", table.classList);
+	console.log("Moves counter: " + XOcounter);
 	if (XOcounter == tableSize*tableSize)
 	{
 		XOcounter = 0;
@@ -360,6 +410,16 @@ function checkWin(e)
 		if (!how) checkCross(row, cell, value, "vertical");
 	}
 
+
+
+	if (compMove && winArr.length < winStreak)
+	{
+		var compTarget = {};
+		compTarget.row = row;
+		compTarget.cell = ++cell;
+		computer(compTarget, XOcounter);
+	}
+
 }
 
 
@@ -435,8 +495,8 @@ function canvasDrawO(e)
 	var coords = getCoords(e.target);
 	var tableCoords = getCoords(e.currentTarget);
 	var lineLength = e.target.offsetWidth - 10;
-	coords.left = coords.left - tableCoords.left + lineLength - 3;
-	coords.top = coords.top - tableCoords.top + lineLength - 3;
+	coords.left = coords.left - tableCoords.left + lineLength - 2;
+	coords.top = coords.top - tableCoords.top + lineLength - 2;
 	c.lineWidth = 3;
 
 	//without animation
