@@ -1,13 +1,6 @@
-var curtain = document.getElementById("menu-container");
-var startMenu = document.getElementById("start-menu");
-var endDialog = document.getElementById("end-game");
-var select = document.getElementById("select-size");
 var toggleXO = sessionStorage.getItem("toggleXO") ? +sessionStorage.getItem("toggleXO") : 0;
 var winStreak = sessionStorage.getItem("winStreak") ? sessionStorage.getItem("winStreak") : 3;
-var winState;
-var winShift = winStreak-1;
 var tableSize;
-var body = document.body;
 var table;
 var XOcounter = sessionStorage.getItem("XOcounter") ? +sessionStorage.getItem("XOcounter") : 0;
 
@@ -19,17 +12,21 @@ var c = canvas.getContext("2d");
 canvas.getContext("2d") ? canvasEnabled = 0 : canvasEnabled = 0;
 //__________________________
 
+
 document.addEventListener("keydown",showPanel);
 setup();
 
 function setup(state)
 {
+	var curtain = document.getElementById("menu-container");
+	var endDialog = document.getElementById("end-game");
+	var select = document.getElementById("select-size");
 	if(state == 'new')
 	{
 		wipeData();
 		table.parentNode.removeChild(table);
-		XOcounter = toggleXO = winState = 0;
-		startMenu.style.display = "inline-block";
+		XOcounter = toggleXO = 0;
+		document.getElementById("start-menu").style.display = "inline-block";
 		endDialog.style.display = "none";
 	}else if(state == 'continue')
 	{
@@ -37,7 +34,7 @@ function setup(state)
 		table.parentNode.removeChild(table);
 		wipeData();
 		sessionStorage.setItem("tableSize", temp);
-		XOcounter = toggleXO = winState = 0;
+		XOcounter = toggleXO = 0;
 	}
 
 	curtain.style.display = "block";
@@ -102,14 +99,12 @@ function saveElement(e)
 	sessionStorage.setItem(row+'class'+cell, value);
 }
 
-
-
 function createTable()
 {
 	table = document.createElement("table");
 	table.className = "XOtable";
 	table.classList = sessionStorage.getItem("tableClassList") ? sessionStorage.getItem("tableClassList") : table.classList;
-	body.appendChild(table);
+	document.body.appendChild(table);
 	table.addEventListener("mousedown", addXOelem);
 	table.ondragstart = function(){return false};
 	table.style.borderCollapse = "collapse";
@@ -154,8 +149,6 @@ function createTable()
 		canvasOFF();
 	}
 }
-
-
 
 function canvasOFF()
 {
@@ -209,7 +202,7 @@ function addXOelem(e)
 		toggleXO = 1;
 		sessionStorage.setItem("toggleXO", toggleXO);
 		table.classList.toggle('showO');
-		if (compEnable)	compMove = 1;
+		//if (compEnable)	compMove = 1;
 	}
 	target.appendChild(xoElem);
 	checkWin(e);
@@ -228,13 +221,15 @@ function addXOelem(e)
 function showWin(value)
 {
 	var endMessage = document.getElementById("end-message");
-	startMenu.style.display = "none";
+	var curtain = document.getElementById("menu-container");
+	var endDialog = document.getElementById("end-game");
+	document.getElementById("start-menu").style.display = "none";
 	curtain.style.display = "block";
 	endDialog.style.display = "inline-block";
 	endMessage.className = value +"win";
 	endDialog.appendChild(endMessage);
 	wipeData();
-	XOcounter = toggleXO = winState = 0;
+	XOcounter = toggleXO = 0;
 }
 
 function getCoords(elem) {
@@ -248,13 +243,13 @@ function getCoords(elem) {
 
 function checkWin(e)
 {
-	if (winState) return;
 	var row = e.target.parentNode.rowIndex;
 	var cell = e.target.cellIndex;
 	var value = e.target.className;
 	var rows = e.currentTarget.rows.length-1;
 	var cells = e.currentTarget.rows[0].cells.length-1;
 	var winRoute = winStreak*2-2;
+	var winShift = winStreak-1;
 	var winArr=[];
 	var coordsTop = getCoordsTopLeft(row, cell, winShift);
 	var coordsBottom = getCoordsBottomLeft(row, cell, winShift);
@@ -367,14 +362,15 @@ function checkWin(e)
 	}
 
 
-
-	if (compMove && winArr.length < winStreak)
-	{
-		var compTarget = {};
-		compTarget.row = row;
-		compTarget.cell = ++cell;
-		computer(compTarget, XOcounter);
-	}
+	/*
+	 if (compMove && winArr.length < winStreak)
+	 {
+	 var compTarget = {};
+	 compTarget.row = row;
+	 compTarget.cell = ++cell;
+	 computer(compTarget, XOcounter);
+	 }
+	 */
 
 }
 
@@ -407,7 +403,7 @@ function getElementsForCanvas()
 
 function canvasDrawTable(table)
 {
-	body.appendChild(canvas);
+	document.body.appendChild(canvas);
 	canvas.id = "canvasXOtable";
 	var cells = document.getElementsByTagName("td");
 
