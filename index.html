@@ -4,8 +4,10 @@
   <title>XO</title>
   <meta charset="utf-8">
   <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./bootstrap/css/bootstrap.css">
 </head>
 <body>
+
 <div id="panel" style="top:0">
 <span onclick="setup('new')">NEW</span> | <span onclick="setup('continue')">CLEAR</span>
 </div>
@@ -40,8 +42,14 @@
         <div class="button continue" onclick="setup('continue')">Continue</div>
     </div>
 </div>
-<script src="./xo.js"></script>
 
+<div class="container" id="field-container">
+
+</div>
+
+<script src="./xo.js"></script>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="./bootstrap/js/bootstrap.js"></script>
 </body>
 
 </html>

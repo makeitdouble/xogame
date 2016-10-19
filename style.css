@@ -1,6 +1,7 @@
 html, body{
     margin:0;
     padding:0;
+    background-color: #F7F7F7 !important;
 }
 
 #canvasXOtable{
@@ -23,19 +24,24 @@ html, body{
 }
 
 .XOtable{
+
     border-collapse: collapse;
     font-family: "Comic Sans MS", sans-serif;
-    font-size: 0.7em;
+    font-size: 1em;
     cursor:default;
+    margin: 0px auto;
+    margin-top:200px;
 }
 
 .XOtable td:hover:before{
-    color: #F56607;
+    /*color: #F56607;*/
+    color: white;
     content: 'X';
 }
 
 .XOtable.showO td:hover:before{
-    color: #2EB821;
+    /*color: #2EB821;*/
+    color:white;
     content: 'O';
 }
 
@@ -56,14 +62,16 @@ td{
     text-align:center;
     padding:0;
     margin:0;
-    border:0 solid lightgrey;
+    border:0 solid rgba(255,255,255,0.2);
 }
 
 span.X{
-    color: #F56607;
+    /*color: #F56607;*/
+    color: white;
 }
 span.O{
-    color: #2EB821;
+    /*color: #2EB821;*/
+    color:white;
 }
 
 span{
@@ -172,4 +180,12 @@ span{
 }
 .button.continue{
     right:10px;
+}
+
+#field-container{
+    width:923px;
+    height:798px;
+    background: url(./bg_desk_fin_.jpg) no-repeat center;
+    z-index: 1000;
+
 }

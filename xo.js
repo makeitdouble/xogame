@@ -11,7 +11,7 @@ var body = document.body;
 var table;
 var XOcounter = sessionStorage.getItem("XOcounter") ? +sessionStorage.getItem("XOcounter") : 0;
 
-var compEnable = 1;
+var compEnable = 0;
 
 //__________________________
 var canvas = document.createElement("canvas");
@@ -155,7 +155,7 @@ function createTable()
 	table = document.createElement("table");
 	table.className = "XOtable";
 	table.classList = sessionStorage.getItem("tableClassList") ? sessionStorage.getItem("tableClassList") : table.classList;
-	body.appendChild(table);
+	document.getElementById("field-container").appendChild(table);
 	table.addEventListener("mousedown", addXOelem);
 	table.ondragstart = function(){return false};
 	table.style.borderCollapse = "collapse";
