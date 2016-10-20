@@ -1,9 +1,13 @@
 var toggleXO = sessionStorage.getItem("toggleXO") ? +sessionStorage.getItem("toggleXO") : 0;
 var winStreak = sessionStorage.getItem("winStreak") ? sessionStorage.getItem("winStreak") : 3;
+var winState;
+var winShift = winStreak-1;
 var tableSize;
 var table;
 var XOcounter = sessionStorage.getItem("XOcounter") ? +sessionStorage.getItem("XOcounter") : 0;
 
+var compEnable = 0;
+var cpu = {};
 
 //__________________________
 var canvas = document.createElement("canvas");
@@ -12,32 +16,58 @@ var c = canvas.getContext("2d");
 canvas.getContext("2d") ? canvasEnabled = 0 : canvasEnabled = 0;
 //__________________________
 
-
-document.addEventListener("keydown",showPanel);
 setup();
+var compMove = 0;
+
+function computer(cpu)
+{
+	compMove = 0;
+	//console.log("row + cell comp: " + cpu.row + " " + cpu.cell);
+
+	cpu.target = table.rows[cpu.row].cells[cpu.cell];
+	//console.log("compTarget" + cpu.target);
+	addXOelem(cpu);
+}
+
+function randomField()
+{
+	var min = 0;
+	var max = tableSize - 1;
+	return min + Math.floor(Math.random() * (max + 1 - min));
+}
+
+/*
+function getCompMove(cpu)
+{
+
+}
+*/
+
+
 
 function setup(state)
 {
-	var curtain = document.getElementById("menu-container");
-	var endDialog = document.getElementById("end-game");
+	var startMenu = document.getElementById("start-menu");
+	var endGame = document.getElementById("end-game");
 	var select = document.getElementById("select-size");
+	var inGameButtons = document.getElementById("inGameButtons");
+	var changeButton = document.getElementsByClassName("clear");
+	changeButton[0].innerHTML = "CLEAR";
+
 	if(state == 'new')
 	{
 		wipeData();
-		table.parentNode.removeChild(table);
-		XOcounter = toggleXO = 0;
-		document.getElementById("start-menu").style.display = "inline-block";
-		endDialog.style.display = "none";
-	}else if(state == 'continue')
-	{
+		startMenu.style.display = "block";
+		inGameButtons.style.display = "none";
+
+		endGame.style.display = "none";
+	}else if(state == 'clear'){
 		var temp = tableSize;
-		table.parentNode.removeChild(table);
 		wipeData();
 		sessionStorage.setItem("tableSize", temp);
-		XOcounter = toggleXO = 0;
+		endGame.style.display = "none";
 	}
 
-	curtain.style.display = "block";
 	document.getElementsByClassName('winStreak')[0].onclick = function(e) {
 		if(e.target.value)
 		{
@@ -58,36 +88,28 @@ function setup(state)
 	{
 		tableSize = +sessionStorage.getItem("tableSize");
 		toggleXO = +sessionStorage.getItem("toggleXO");
-		curtain.style.display = "none";
+		inGameButtons.style.display = "block";
+		startMenu.style.display = "none";
 		createTable();
 		return;
 	}
+
 	if (state == 'begin')
 	{
+		inGameButtons.style.display = "block";
+		startMenu.style.display = "none";
 		tableSize = +select.value;
 		sessionStorage.setItem("tableSize", tableSize);
-		curtain.style.display = "none";
 		createTable();
 	}
 }
 
-function showPanel(e)
-{
-	if (e.ctrlKey)
-	{
-		var panel = document.getElementById("panel");
-		if(panel.style.top == "0px")
-		{
-			panel.style.top = "-50px";
-		}else{
-			panel.style.top = "0px";
-		}
-	}
-
-}
 function wipeData()
 {
 	sessionStorage.clear();
+	if (table) table.parentNode.removeChild(table);
+	table = null;
+	XOcounter = toggleXO = winState = 0;
 	console.log("___________________ALL CLEAR, sir!___________________");
 }
 
@@ -99,15 +121,41 @@ function saveElement(e)
 	sessionStorage.setItem(row+'class'+cell, value);
 }
 
+function getParams(param)
+{
+	var paramsObj = {
+		'font': {
+			3: "6em",
+			5: "4em",
+			10: "2.3em",
+			15: "1.3em"
+		},
+		'cellSize': {
+			3: "150px",
+			5: "100px",
+			10: "50px",
+			15: "30px"
+		},
+		'border': {
+			3: "6px",
+			5: "4px",
+			10: "2px",
+			15: "1px"
+		}
+
+	};
+	return paramsObj[param][tableSize];
+}
+
 function createTable()
 {
 	table = document.createElement("table");
 	table.className = "XOtable";
 	table.classList = sessionStorage.getItem("tableClassList") ? sessionStorage.getItem("tableClassList") : table.classList;
-	document.body.appendChild(table);
+	document.getElementById("field-container").appendChild(table);
 	table.addEventListener("mousedown", addXOelem);
 	table.ondragstart = function(){return false};
-	table.style.borderCollapse = "collapse";
+	table.style.fontSize = getParams('font');
 
 	for ( var i = 0; i < tableSize; i++)
 	{
@@ -117,7 +165,8 @@ function createTable()
 		{
 			var td = document.createElement("td");
 			tr.appendChild(td);
-
+			td.width = getParams('cellSize');
+			td.height = getParams('cellSize');
 			if (sessionStorage.getItem(i+'class'+j))
 			{
 				var xoElem = document.createElement("span");
@@ -137,25 +186,31 @@ function createTable()
 
 	if ( canvasEnabled )
 	{
-		table.style.width =  25 * tableSize + "px";
-		table.style.height = 25 * tableSize + "px";
-
 		canvasDrawTable(table);
 		getElementsForCanvas();
 
 	}else{
-		table.style.width = 25 * tableSize + (tableSize+1) + "px";
-		table.style.height = 25 * tableSize + (tableSize+1) + "px";
 		canvasOFF();
 	}
 }
 
 function canvasOFF()
 {
-	var cells = document.getElementsByTagName("td");
-	for ( var i = 0; i < cells.length; i++)
+	for ( var i = 0; i < tableSize; i++)
 	{
-		cells[i].style.borderWidth = "1px";
+		for ( var j = 0; j < tableSize; j++ )
+		{
+			table.rows[i].cells[j].style.borderWidth = getParams('border');
+
+			if (i == 0 || i == (tableSize - 1)) {
+				table.rows[i].cells[j].style.borderTopWidth = "0px";
+				table.rows[i].cells[j].style.borderBottomWidth = "0px";
+			}
+			if (j == 0 || j == (tableSize - 1)) {
+				table.rows[i].cells[j].style.borderLeftWidth = "0px";
+				table.rows[i].cells[j].style.borderRightWidth = "0px";
+			}
+		}
 	}
 }
 
@@ -166,70 +221,70 @@ function addXOelem(e)
 		return false;
 	}
 
-	var target = e.target;
+	if(e.target == e.currentTarget || !!e.target.className ) return;
 
-	//console.log("xotarget: " + e.target);
-
-	if(target == e.currentTarget || !!target.className ) return;
-	target.innerHTML = "";
 	var xoElem = document.createElement("span");
 	xoElem.className = "xoElem";
 
 	if ( toggleXO )
 	{
 		xoElem.classList.add("O");
-		target.className = "O";
+		e.target.className = "O";
+
 		if (canvasEnabled)
 		{
 			canvasDrawO(e);
 		}else{
 			xoElem.innerHTML="O";
 		}
+
 		saveElement(e);
 		toggleXO = 0;
 		sessionStorage.setItem("toggleXO", toggleXO);
 		table.classList.toggle('showO');
+
 	}else{
+
 		xoElem.classList.add("X");
-		target.className = "X";
+		e.target.className = "X";
+
 		if (canvasEnabled)
 		{
 			canvasDrawX(e);
 		}else{
 			xoElem.innerHTML="X";
 		}
+
 		saveElement(e);
 		toggleXO = 1;
 		sessionStorage.setItem("toggleXO", toggleXO);
 		table.classList.toggle('showO');
-		//if (compEnable)	compMove = 1;
+
+		if (compEnable)	compMove = 1;
 	}
-	target.appendChild(xoElem);
-	checkWin(e);
+
+	e.target.appendChild(xoElem);
 	XOcounter++;
 	sessionStorage.setItem("XOcounter", XOcounter);
 	sessionStorage.setItem("tableClassList", table.classList);
 	console.log("Moves counter: " + XOcounter);
+
+	checkWin(e);
+
 	if (XOcounter == tableSize*tableSize)
 	{
-		XOcounter = 0;
-		wipeData();
 		showWin('draw');
 	}
 }
 
 function showWin(value)
 {
-	var endMessage = document.getElementById("end-message");
-	var curtain = document.getElementById("menu-container");
-	var endDialog = document.getElementById("end-game");
-	document.getElementById("start-menu").style.display = "none";
-	curtain.style.display = "block";
-	endDialog.style.display = "inline-block";
-	endMessage.className = value +"win";
-	endDialog.appendChild(endMessage);
+	var endGame = document.getElementById("end-game");
+	var changeButton = document.getElementsByClassName("clear");
+	changeButton[0].innerHTML = "CONTINUE";
+	endGame.style.display = "block";
+	endGame.className = value +"win";
 	wipeData();
-	XOcounter = toggleXO = 0;
 }
 
 function getCoords(elem) {
@@ -243,13 +298,13 @@ function getCoords(elem) {
 
 function checkWin(e)
 {
+	if (winState) return;
 	var row = e.target.parentNode.rowIndex;
 	var cell = e.target.cellIndex;
 	var value = e.target.className;
 	var rows = e.currentTarget.rows.length-1;
 	var cells = e.currentTarget.rows[0].cells.length-1;
 	var winRoute = winStreak*2-2;
-	var winShift = winStreak-1;
 	var winArr=[];
 	var coordsTop = getCoordsTopLeft(row, cell, winShift);
 	var coordsBottom = getCoordsBottomLeft(row, cell, winShift);
@@ -362,15 +417,26 @@ function checkWin(e)
 	}
 
 
-	/*
-	 if (compMove && winArr.length < winStreak)
-	 {
-	 var compTarget = {};
-	 compTarget.row = row;
-	 compTarget.cell = ++cell;
-	 computer(compTarget, XOcounter);
-	 }
-	 */
+
+	if (compMove && winArr.length < winStreak)
+	{
+		cpu.currentTarget = table;
+		if (XOcounter == 1)
+		{
+			do{cpu.target = table.rows[randomField()].cells[randomField()];}
+			while(cpu.target.className)
+
+			cpu.row = cpu.target.parentNode.rowIndex;
+			cpu.cell = cpu.target.cellIndex;
+			cpu.fMove = cpu.target;
+
+		}else{
+			cpu.row = cpu.fMove.parentNode.rowIndex;
+			cpu.cell = cpu.cell+1;
+		}
+
+		computer(cpu);
+	}
 
 }
 
@@ -457,7 +523,7 @@ function canvasDrawO(e)
 	 c.beginPath();
 	 c.arc( coords.left, coords.top, lineLength/2, 0, Math.PI*2, false);
 	 c.stroke();
-	 */
+	*/
 
 	//with animation
 	//_________________
@@ -500,7 +566,7 @@ function canvasDrawX(e)
 	 c.moveTo(lineLength+coords.left,coords.top);
 	 c.lineTo(coords.left,coords.top+lineLength);
 	 c.stroke();
-	 */
+	*/
 
 
 	//with animation
