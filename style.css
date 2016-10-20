@@ -1,7 +1,7 @@
 html, body{
     margin:0;
     padding:0;
-    background-color: #F7F7F7 !important;
+    background-color: #F2F2F2 !important;
 }
 
 #canvasXOtable{
@@ -9,39 +9,35 @@ html, body{
     z-index: -1;
 }
 
-#panel{
-    position:fixed;
-    right:0;
-    color:white;
-    vertical-align: middle;
-    text-align: center;
-    padding:5px;
-    background-color: orangered;
-}
-
-#panel span{
-    cursor:pointer;
-}
-
 .XOtable{
 
     border-collapse: collapse;
     font-family: "Comic Sans MS", sans-serif;
-    font-size: 1em;
+    font-size: 5em;
     cursor:default;
-    margin: 0px auto;
-    margin-top:200px;
+    margin: 100px  auto 0 auto;
+    width:500px;
+    height:500px;
+}
+
+tr{
+    padding:0;
+}
+
+td {
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    border: 0 solid lightgrey;
 }
 
 .XOtable td:hover:before{
-    /*color: #F56607;*/
-    color: white;
+    color: #F56607;
     content: 'X';
 }
 
 .XOtable.showO td:hover:before{
-    /*color: #2EB821;*/
-    color:white;
+    color: #2EB821;
     content: 'O';
 }
 
@@ -52,26 +48,12 @@ html, body{
     content: '';
 }
 
-tr{
-    padding:0;
-}
-
-td{
-    width:25px;
-    height:25px;
-    text-align:center;
-    padding:0;
-    margin:0;
-    border:0 solid rgba(255,255,255,0.2);
-}
-
 span.X{
-    /*color: #F56607;*/
-    color: white;
+  color: #F56607;
+
 }
 span.O{
-    /*color: #2EB821;*/
-    color:white;
+    color: #2EB821;
 }
 
 span{
@@ -81,77 +63,61 @@ span{
     -ms-user-select: none;
 }
 
-#menu-container {
-    cursor:default;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 9999;
-    display: none;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    background-color: rgba(230, 230, 230, 0.5);
-}
 
-#menu-container:before {
-    display: inline-block;
-    height: 100%;
-    content: '';
-    vertical-align: middle;
-}
 
-.dialog{
-    position:relative;
-    display:inline-block;
-    vertical-align: middle;
-    border-radius: 10px;
-    width:200px;
-    height:200px;
-    background: #FCFBFA;
-    box-shadow: 3px 3px 15px #999999;
-    font-family: Tahoma, sans-serif;
-    font-size: 18px;
-    color: #808080;
-}
 #end-game{
+    height:400px;
+    width:400px;
     display: none;
+    margin: 150px  auto 0 auto;
 }
+
 #start-menu{
     text-align: right;
-    background-image: url(./bkg.png);
-}
+    background-image: url(./main_bg_.png);
+    height:600px;
+    width:600px;
+    position: relative;
+    margin-top:50px;
+    font-family: Tahoma, sans-serif;
+    font-size: 18px;
+    color: grey;
 
-#end-message{
-    display: block;
-    width: 100%;
-    height:100%;
-}
-.Xwin{
-    background-image: url(./xwin.png);
-}
-
-.Owin{
-    background-image: url(./owin.png);
-}
-
-.drawwin{
-    background-image: url(./draw.png);
 }
 
 #start-menu .setup{
     display: block;
     position:absolute;
-    bottom:0;
-    right:10px;
+    bottom:22px;
+    right:100px;
 }
+
+#start-menu .setup select{
+   width:110px;
+}
+
 #start-menu .setup div {
-    padding:5px;
-    margin:5px;
+    padding:25px;
+    margin:25px;
     text-align: center;
+}
+
+#start-menu .btn.begin{
+    bottom: -50px;
+    right: 100px;
+    width: 200px;
+}
+
+.Xwin{
+    background-image: url(./xwin.png);
+}
+
+.Owin{
+    background-image: url(./owin_.png);
+}
+
+.drawwin{
+    background-image: url(./draw.png);
 }
 
 .button{
@@ -183,9 +149,45 @@ span{
 }
 
 #field-container{
-    width:923px;
-    height:798px;
-    background: url(./bg_desk_fin_.jpg) no-repeat center;
-    z-index: 1000;
+    position: relative;
+    width:631px;
+    height:882px;
+    background: url(./letter_bg.png) no-repeat center;
+}
 
+#field-container .btn{
+    position:absolute;
+    color: #cccccc;
+    background-color: rgba(255,255,255,0);
+    font-size: 25px;
+    border-width: 3px;
+}
+#field-container .btn:hover{
+   color: #FAA24B;
+}
+
+#field-container .btn.new{
+    bottom: 150px;
+    right: 200px;
+    transform: rotate(-20deg);
+}
+
+#field-container .btn.clear{
+    bottom: 80px;
+    right: 90px;
+    transform: rotate(15deg);
+}
+
+#pencil{
+    position: absolute;
+    z-index: 1;
+    bottom:-30px;
+    right:-170px;
+    width:244px;
+    height:506px;
+    background: url(./pencil.png) no-repeat center;
+}
+
+#inGameButtons{
+    display: none;
 }

@@ -7,44 +7,38 @@
   <link rel="stylesheet" href="./bootstrap/css/bootstrap.css">
 </head>
 <body>
-
-<div id="panel" style="top:0">
-<span onclick="setup('new')">NEW</span> | <span onclick="setup('continue')">CLEAR</span>
-</div>
-<div id="menu-container">
-    <div id="start-menu" class="dialog">
-        <div class="setup">
-            <div class="tableSize">
-            <label>Table Size<br>
-            <select id="select-size" name="size">
-                <option value="3">3 x 3</option>
-                <option value="5">5 x 5</option>
-                <option value="10">10 x 10</option>
-                <option value="15">15 x 15</option>
-                <option value="20">20 x 20</option>
-                <option value="30">30 x 30</option>
-                <option value="40">40 x 40</option>
-                <option value="50">50 x 50</option>
-            </select></label>
+<div class="container" id="field-container">
+    <div class="row">
+        <div class="span12">
+            <div id="start-menu" class="dialog">
+                <div class="setup">
+                    <div class="tableSize">
+                        <h3>Table Size</h3>
+                            <select id="select-size" title="Select size" name="size">
+                                <option value="3">3 x 3</option>
+                                <option value="5">5 x 5</option>
+                                <option value="10">10 x 10</option>
+                                <option value="15">15 x 15</option>
+                            </select>
+                    </div>
+                    <div class="winStreak">
+                        <h3>Win Streak</h3>
+                        <label><input type="radio" name="streak" value="3" checked> 3 &nbsp;</label>
+                        <label><input type="radio" name="streak" value="5"> 5</label>
+                    </div>
+                </div>
+                <div class="btn btn-default btn-lg begin" onclick="setup('begin')">BEGIN</div>
             </div>
-            <div class="winStreak">
-            <span>Win Streak</span><br>
-            <label><input type="radio" name="streak" value="3" checked>3</label>
-            <label><input type="radio" name="streak" value="5">5</label>
-            </div>
-
         </div>
-        <div class="button begin" onclick="setup('begin')">Begin</div>
     </div>
     <div id="end-game" class="dialog">
-        <span id="end-message"></span>
-        <div class="button new" onclick="setup('new')">New game</div>
-        <div class="button continue" onclick="setup('continue')">Continue</div>
     </div>
-</div>
 
-<div class="container" id="field-container">
-
+    <div id="pencil"></div>
+    <div id="inGameButtons">
+        <div class="btn btn-default new btn-lg" onclick="setup('new')">NEW GAME</div>
+        <div class="btn btn-default clear btn-lg" onclick="setup('clear')">CLEAR</div>
+    </div>
 </div>
 
 <script src="./xo.js"></script>
