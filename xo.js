@@ -7,6 +7,7 @@ var table;
 var XOcounter = sessionStorage.getItem("XOcounter") ? +sessionStorage.getItem("XOcounter") : 0;
 
 var compEnable = 0;
+var cpu = {};
 
 //__________________________
 var canvas = document.createElement("canvas");
@@ -17,32 +18,15 @@ canvas.getContext("2d") ? canvasEnabled = 0 : canvasEnabled = 0;
 
 setup();
 var compMove = 0;
-var fMove;
-var compRow;
-var compCell;
 
-function computer(compTarget, firstMove)
+function computer(cpu)
 {
 	compMove = 0;
-	var c = {};
-	//e.target = table.rows[compTarget.row].cells[compTarget.cell];
-	c.currentTarget = table;
+	//console.log("row + cell comp: " + cpu.row + " " + cpu.cell);
 
-	if (firstMove == 0)
-	{
-		do{c.target = table.rows[randomField()].cells[randomField()];}
-		while(c.target.className)
-		fMove = c.target;
-		compRow = fMove.parentNode.rowIndex;
-		compCell = fMove.cellIndex;
-	}
-
-	console.log("row + cell comp: " + compRow + " " + compCell);
-
-	compCell++;
-	c.target = table.rows[compRow].cells[compCell];
-	console.log("compTarget" + c.target);
-	addXOelem(c);
+	cpu.target = table.rows[cpu.row].cells[cpu.cell];
+	//console.log("compTarget" + cpu.target);
+	addXOelem(cpu);
 }
 
 function randomField()
@@ -53,9 +37,9 @@ function randomField()
 }
 
 /*
-function getCompMove(c)
+function getCompMove(cpu)
 {
-	
+
 }
 */
 
@@ -436,10 +420,22 @@ function checkWin(e)
 
 	if (compMove && winArr.length < winStreak)
 	{
-		var compTarget = {};
-		compTarget.row = row;
-		compTarget.cell = ++cell;
-		computer(compTarget, XOcounter);
+		cpu.currentTarget = table;
+		if (XOcounter == 1)
+		{
+			do{cpu.target = table.rows[randomField()].cells[randomField()];}
+			while(cpu.target.className)
+
+			cpu.row = cpu.target.parentNode.rowIndex;
+			cpu.cell = cpu.target.cellIndex;
+			cpu.fMove = cpu.target;
+
+		}else{
+			cpu.row = cpu.fMove.parentNode.rowIndex;
+			cpu.cell = cpu.cell+1;
+		}
+
+		computer(cpu);
 	}
 
 }

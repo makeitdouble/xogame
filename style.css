@@ -191,3 +191,12 @@ span{
 #inGameButtons{
     display: none;
 }
+
+#ai{
+    right: -158px;
+    top: 50px;
+    position: absolute;
+    width: 200px;
+    height: 125px;
+    background: url(./ai.png) no-repeat center;
+}
