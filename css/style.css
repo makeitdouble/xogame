@@ -74,7 +74,7 @@ span{
 
 #start-menu{
     text-align: right;
-    background-image: url(./main_bg_.png);
+    background-image: url(../img/main_bg_.png);
     height:600px;
     width:600px;
     position: relative;
@@ -109,15 +109,15 @@ span{
 }
 
 .Xwin{
-    background-image: url(./xwin.png);
+    background-image: url(../img/xwin.png);
 }
 
 .Owin{
-    background-image: url(./owin_.png);
+    background-image: url(../img/owin_.png);
 }
 
 .drawwin{
-    background-image: url(./draw.png);
+    background-image: url(../img/draw.png);
 }
 
 .button{
@@ -152,7 +152,7 @@ span{
     position: relative;
     width:631px;
     height:882px;
-    background: url(./letter_bg.png) no-repeat center;
+    background: url(../img/letter_bg.png) no-repeat center;
 }
 
 #field-container .btn{
@@ -185,7 +185,7 @@ span{
     right:-170px;
     width:244px;
     height:506px;
-    background: url(./pencil.png) no-repeat center;
+    background: url(../img/pencil.png) no-repeat center;
 }
 
 #inGameButtons{
@@ -198,5 +198,5 @@ span{
     position: absolute;
     width: 200px;
     height: 125px;
-    background: url(./ai.png) no-repeat center;
+    background: url(../img/ai.png) no-repeat center;
 }
